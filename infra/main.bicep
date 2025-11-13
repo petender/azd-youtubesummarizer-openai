@@ -25,6 +25,7 @@ var abbreviations = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = {
   'azd-env-name': environmentName
+  'SecurityControl': 'Ignore'
   
 }
 
