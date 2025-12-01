@@ -1,4 +1,4 @@
-## Azure OpenAI Service with Blazor YoutubeSummarizer sample app
+## Azure OpenAI Service with Blazor Youtube Summarizer sample app
 
 This repo contains a demo for an Azure OpenAI Service, together with a Blazor "Youtube Summarizer" sample app. By providing a Youtube URL and selecting your preferred language, a request is sent to the Azure OpenAI Service, after which the ChatCompletion provides a 5-bullet point summary of the video in your selected language.
 
@@ -34,7 +34,7 @@ azd down --purge --force
 
 ## What is the demo scenario about?
 
-- Use the [demo guide]([insert raw link to the demoguide within your repo](https://github.com/petender/azd-youtubesummarizer-openai/blob/main/demoguide/demoguide.md)) for inspiration for your demo
+- Use the [demo guide](https://github.com/petender/azd-youtubesummarizer-openai/blob/main/demoguide/demoguide.md) for inspiration for your demo
 
 ## 💭 Feedback and Contributing
 Feel free to create issues for bugs, suggestions or Fork and create a PR with new demo scenarios or optimizations to the templates. 
