@@ -1,7 +1,7 @@
 using Aliencube.YouTubeSubtitlesExtractor;
 using Aliencube.YouTubeSubtitlesExtractor.Abstractions;
-using Azure;
 using Azure.AI.OpenAI;
+using Azure.Identity;
 using YoutubeSummarizer.Components;
 using YoutubeSummarizer.Configurations;
 using YoutubeSummarizer.Services;
@@ -22,7 +22,7 @@ builder.Services
     {
         var openAISettings = p.GetRequiredService<OpenAISettings>();
         var endpoint = new Uri(openAISettings.Endpoint ?? throw new InvalidOperationException("OpenAI endpoint is not configured."));
-        var credential = new AzureKeyCredential(openAISettings.ApiKey ?? throw new InvalidOperationException("OpenAI API key is not configured."));
+        var credential = new DefaultAzureCredential();
         var client = new OpenAIClient(endpoint, credential);
         return client;
     })
