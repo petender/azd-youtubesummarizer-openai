@@ -5,7 +5,6 @@ public class OpenAISettings
     public const string Name = "OpenAI";
     public string? DeploymentName { get; set; }
     public string? Endpoint { get; set; }
-    public string? ApiKey { get; set; }
 }
 
 public class PromptSettings

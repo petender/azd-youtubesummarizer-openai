@@ -15,20 +15,10 @@ param openAiAccountEndpoint string
 
 type openAiOptions = {
   completionDeploymentName: string
-  openAiApiKey: string
-
 }
 
 @description('Application configuration settings for OpenAI.')
 param openAiSettings openAiOptions
-
-type managedIdentity = {
-  resourceId: string
-  clientId: string
-}
-
-@description('Unique identifier for user-assigned managed identity.')
-param userAssignedManagedIdentity managedIdentity
 
 // Parameters needed for the OpenAI account module
 param accountName string
@@ -70,10 +60,7 @@ module appServiceWebApp '../core/host/app-service/site.bicep' = {
     runtimeName: 'dotnetcore'
     runtimeVersion: '8.0'
     kind: 'app,linux'
-    enableSystemAssignedManagedIdentity: false
-    userAssignedManagedIdentityIds: [
-      userAssignedManagedIdentity.resourceId
-    ]
+    enableSystemAssignedManagedIdentity: true
   }
 }
 
@@ -84,9 +71,7 @@ module appServiceWebAppConfig '../core/host/app-service/config.bicep' = {
     appSettings: {
       WEBSITE_RUN_FROM_PACKAGE: '1' //used to speed up deployment with no app runtime impact
       OPENAI__ENDPOINT: openAiAccountEndpoint
-      OPENAI__APIKEY: openAiSettings.openAiApiKey
       OPENAI__DEPLOYMENTNAME: 'gpt-4o'
-      AZURE_CLIENT_ID: userAssignedManagedIdentity.clientId
       PROMPT__SYSTEM: 'You are an AI assistant which is used to summarize YouTube videos'
       PROMPT__TEMPERATURE: '0.7'
       PROMPT__MAXTOKENS: '3000'
@@ -96,3 +81,4 @@ module appServiceWebAppConfig '../core/host/app-service/config.bicep' = {
 
 output name string = appServiceWebApp.outputs.name
 output endpoint string = appServiceWebApp.outputs.endpoint
+output managedIdentityPrincipalId string = appServiceWebApp.outputs.managedIdentityPrincipalId

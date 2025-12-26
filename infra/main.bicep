@@ -12,7 +12,6 @@ param location string
 param principalId string = ''
 
 // Optional parameters
-param userAssignedIdentityName string = ''
 param appServicePlanName string = ''
 param appServiceWebAppName string = ''
 
@@ -40,16 +39,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: environmentName
   location: location
   tags: tags
-}
-
-module identity 'app/identity.bicep' = {
-  name: 'identity'
-  scope: resourceGroup
-  params: {
-    identityName: !empty(userAssignedIdentityName) ? userAssignedIdentityName : '${abbreviations.userAssignedIdentity}-${resourceToken}'
-    location: location
-    tags: tags
-  }
 }
 
 module openAiAccount 'core/ai/cognitive-services/account.bicep' = {
@@ -93,12 +82,6 @@ module web 'app/web.bicep' = {
     accountName: openAiAccount.outputs.name
     openAiSettings: {
       completionDeploymentName: openAiModelDeployments.name
-      openAiApiKey: openAiAccount.outputs.apikey
-    }
-
-    userAssignedManagedIdentity: {
-      resourceId: identity.outputs.resourceId
-      clientId: identity.outputs.clientId
     }
     location: location
     tags: tags
@@ -112,7 +95,7 @@ module security 'app/security.bicep' = {
   name: 'security'
   scope: resourceGroup
   params: {
-    appPrincipalId: identity.outputs.principalId
+    appPrincipalId: web.outputs.managedIdentityPrincipalId
     userPrincipalId: !empty(principalId) ? principalId : null
     principalType: principalType
   }
